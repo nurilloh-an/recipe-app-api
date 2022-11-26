@@ -10,7 +10,7 @@ from core.models import (
 )
 
 
-class IngredientSerialuzer(serializers.ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
     """Serializer for ingradients"""
 
     class Meta:
