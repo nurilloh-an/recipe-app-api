@@ -57,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Recipe(models.Model):
-    """Recipe objects."""
+    """Recipe object."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -71,8 +71,9 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField('Ingredient')
     image = models.ImageField(null=True, upload_to=recipe_image_file_path)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
+
 
 class Tag(models.Model):
     """Tag for filtering recipes."""
@@ -94,6 +95,5 @@ class Ingredient(models.Model):
         on_delete=models.CASCADE,
     )
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
-

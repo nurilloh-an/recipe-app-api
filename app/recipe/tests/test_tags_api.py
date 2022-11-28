@@ -15,8 +15,6 @@ from core.models import (
     Recipe,
 )
 
-from core.models import Tag
-
 from recipe.serializers import TagSerializer
 
 
@@ -30,11 +28,11 @@ def detail_url(tag_id):
 
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return a user."""
-    return get_user_model().objects.create_user(email, password)
+    return get_user_model().objects.create_user(email=email, password=password)
 
 
 class PublicTagsApiTests(TestCase):
-    """Test unauthicated API requests."""
+    """Test unauthenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
@@ -56,8 +54,8 @@ class PrivateTagsApiTests(TestCase):
 
     def test_retrieve_tags(self):
         """Test retrieving a list of tags."""
-        Tag.objects.create(user=self.user, name="George")
-        Tag.objects.create(user=self.user, name='SanAsia')
+        Tag.objects.create(user=self.user, name='Vegan')
+        Tag.objects.create(user=self.user, name='Dessert')
 
         res = self.client.get(TAGS_URL)
 

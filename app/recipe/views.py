@@ -7,6 +7,7 @@ from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiTypes,
 )
+
 from rest_framework import (
     viewsets,
     mixins,
@@ -22,7 +23,6 @@ from core.models import (
     Tag,
     Ingredient,
 )
-from core.models import Recipe
 from recipe import serializers
 
 
@@ -42,7 +42,6 @@ from recipe import serializers
         ]
     )
 )
-
 class RecipeViewSet(viewsets.ModelViewSet):
     """View for manage recipe APIs."""
     serializer_class = serializers.RecipeDetailSerializer
@@ -70,9 +69,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             user=self.request.user
         ).order_by('-id').distinct()
 
-        return self.queryset.filter(user=self.request.user).order_by('-id')
-
     def get_serializer_class(self):
+        """Return the serializer class for request."""
         if self.action == 'list':
             return serializers.RecipeSerializer
         elif self.action == 'upload_image':
@@ -84,9 +82,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         """Create a new recipe."""
         serializer.save(user=self.request.user)
 
-    @action(methods=['POST'], detail=True, url_path='upload_image')
+    @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
-        """Uplaod an image to recipe."""
+        """Upload an image to recipe."""
         recipe = self.get_object()
         serializer = self.get_serializer(recipe, data=request.data)
 
@@ -96,22 +94,23 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @extend_schema_view(
     list=extend_schema(
-        parameters=(
+        parameters=[
             OpenApiParameter(
                 'assigned_only',
                 OpenApiTypes.INT, enum=[0, 1],
-                description='Filter by assigned to recipes.',
-            )
-        )
+                description='Filter by items assigned to recipes.',
+            ),
+        ]
     )
 )
 class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,
                             mixins.UpdateModelMixin,
                             mixins.ListModelMixin,
                             viewsets.GenericViewSet):
-    """Base viewset for recipe arrtibutes."""
+    """Base viewset for recipe attributes."""
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -136,6 +135,6 @@ class TagViewSet(BaseRecipeAttrViewSet):
 
 
 class IngredientViewSet(BaseRecipeAttrViewSet):
-    """Manage ingredients in the database"""
+    """Manage ingredients in the database."""
     serializer_class = serializers.IngredientSerializer
     queryset = Ingredient.objects.all()

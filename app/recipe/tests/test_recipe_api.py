@@ -25,7 +25,7 @@ from recipe.serializers import (
     RecipeDetailSerializer,
 )
 
-from recipe.serializers import RecipeSerializer
+
 RECIPES_URL = reverse('recipe:recipe-list')
 
 
@@ -105,8 +105,8 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    def test_get_crecipe_detail(self):
-        """Test get recipe  detail."""
+    def test_get_recipe_detail(self):
+        """Test get recipe detail."""
         recipe = create_recipe(user=self.user)
 
         url = detail_url(recipe.id)
@@ -129,7 +129,6 @@ class PrivateRecipeApiTests(TestCase):
         for k, v in payload.items():
             self.assertEqual(getattr(recipe, k), v)
         self.assertEqual(recipe.user, self.user)
-
 
     def test_partial_update(self):
         """Test partial update of a recipe."""
@@ -419,6 +418,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
