@@ -19,3 +19,28 @@ jobs:
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
+      
+# Also this way is flexible
+# name: Build and Test
+
+# on: [push]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Docker
+#       uses: docker/setup-docker@v2
+#       with:
+#         version: 20.10.5
+
+#     - name: Build and test
+#       run: |
+#         docker-compose -f path/to/docker-compose.yml build
+#         docker-compose -f path/to/docker-compose.yml up -d
+#         docker-compose -f path/to/docker-compose.yml run posox_prod python manage.py test
+#         docker-compose -f path/to/docker-compose.yml down
